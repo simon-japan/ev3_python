@@ -1,36 +1,32 @@
-import rpyc
+from robot_body import RobotBody, ConfiguredMotor, Polarity
 
-robo_conn = rpyc.classic.connect('ev3dev.local')
-ev3 = robo_conn.modules['ev3dev.ev3']
+RIGHT_WHEEL = 'c'
+LEFT_WHEEL = 'b'
+STEERING_WHEEL = 'a'
 
-right_wheel = ev3.LargeMotor('outC')
-left_wheel = ev3.LargeMotor('outB')
-steering = ev3.MediumMotor('outA')
-
-assert right_wheel.connected
-assert left_wheel.connected
-assert steering.connected
-
-
-def drive(time=1000, speed=600, forwards=True):
-    polarity = 'inversed' if forwards else 'normal'
-    right_wheel.polarity = polarity
-    left_wheel.polarity = polarity
-    right_wheel.run_timed(time_sp=time, speed_sp=speed)
-    left_wheel.run_timed(time_sp=time, speed_sp=speed)
+body = RobotBody()
+body.connect()
+body.motors[RIGHT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
+body.motors[LEFT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
+body.detect_connected_motors()
 
 
-def turn(degree):
+def drive(time=1000, speed=600, reverse=False):
+    body.get_motor(RIGHT_WHEEL).run_timed(time=time, speed=speed, reverse=reverse)
+    body.get_motor(LEFT_WHEEL).run_timed(time=time, speed=speed, reverse=reverse)
+
+
+def turn(degree=100):
     """
     :param degree: Positive means right, negative means left.
     """
+    reverse = False
     if degree < 0:
-        steering.polarity = 'inversed'
+        reverse = True
         degree = 0 - degree
-    else:
-        steering.polarity = 'normal'
-    steering.run_timed(time_sp=degree, speed_sp=500)
+    body.get_motor(STEERING_WHEEL).run_timed(time=degree, speed=500, reverse=reverse)
 
 
-def speak(words):
-    ev3.Sound.speak(words).wait()
+def say(words):
+    body.speak(words)
+
