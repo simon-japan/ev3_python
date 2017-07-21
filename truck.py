@@ -5,7 +5,6 @@ LEFT_WHEEL = 'b'
 STEERING_WHEEL = 'a'
 
 body = RobotBody()
-body.connect()
 body.motors[RIGHT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
 body.motors[LEFT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
 body.detect_connected_motors()
@@ -29,4 +28,3 @@ def turn(degree=100):
 
 def say(words):
     body.speak(words)
-

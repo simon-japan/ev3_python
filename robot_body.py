@@ -3,8 +3,8 @@ Classes for controlling EV3 robots.
 Generic features that could be used in a variety of robots.
 """
 
-import rpyc
 from enum import Enum
+import ev3dev.ev3 as ev3
 
 
 class Polarity(Enum):
@@ -18,19 +18,12 @@ class RobotBody(object):
     Auto-detects motors that are connected.
     Can be used as a simple interface for sending commands to the motors.
     """
-    def __init__(self, ev3_address='ev3dev.local'):
+    def __init__(self):
         motors = {}
         self.motors = motors
-        self.ev3_address = ev3_address
-        self.robo_conn = None
-        self.ev3 = None
-
-    def connect(self):
-        self.robo_conn = rpyc.classic.connect(self.ev3_address)
-        self.ev3 = self.robo_conn.modules['ev3dev.ev3']
 
     def detect_connected_motors(self):
-        for motor in self.ev3.list_motors():
+        for motor in ev3.list_motors():
             letter = motor.address[-1:].lower()
             if letter in self.motors:
                 self.motors[letter].set_motor(motor)
@@ -49,8 +42,9 @@ class RobotBody(object):
 
     # def _detect_motor(self, output_letter):
 
-    def speak(self, words):
-        self.ev3.Sound.speak(words).wait()
+    @staticmethod
+    def speak(words):
+        ev3.Sound.speak(words).wait()
 
 
 class ConfiguredMotor(object):
