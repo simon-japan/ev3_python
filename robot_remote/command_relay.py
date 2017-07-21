@@ -26,7 +26,8 @@ class CommandRelay(object):
         channel.basic_ack(delivery_tag=delivery_method.delivery_tag)
         print('received: {}'.format(msg_body))
         try:
-            json_msg = json.loads(msg_body)
+            decoded = msg_body.decode('utf-8')
+            json_msg = json.loads(decoded)
         except TypeError as te:
             print(te)
         else:
