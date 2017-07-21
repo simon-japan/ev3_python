@@ -21,12 +21,20 @@ drive_backward_command = {
     'args': {'reverse': True}
 }
 
+talk_command = {
+    'command_name': 'say',
+    'args': {'words': 'Testing, testing.'}
+}
+
 channel.basic_publish(exchange='', routing_key='robot', body=json.dumps(drive_forward_command))
 print("Sent drive forward command")
 
-time.sleep(3)
+time.sleep(5)
 
 channel.basic_publish(exchange='', routing_key='robot', body=json.dumps(drive_backward_command))
 print("Sent drive backward command")
+
+channel.basic_publish(exchange='', routing_key='robot', body=json.dumps(talk_command))
+print("Sent speak command")
 
 connection.close()
