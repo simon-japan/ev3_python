@@ -23,5 +23,5 @@ class CommandRelay(object):
         print("Awaiting command messages over RabbitMQ.")
 
     def on_request(self, channel, delivery_method, msg_properties, msg_body):
-        json_msg = json.loads(msg_body)
+        json_msg = json.loads(str(msg_body))
         self.request_processor.process_request(json_msg)
