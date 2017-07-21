@@ -21,12 +21,12 @@ drive_backward_command = {
     'args': {'reverse': True}
 }
 
-channel.basic_publish(exchange='', routing_key='hello', body=json.dumps(drive_forward_command))
+channel.basic_publish(exchange='', routing_key='robot', body=json.dumps(drive_forward_command))
 print("Sent drive forward command")
 
 time.sleep(3)
 
-channel.basic_publish(exchange='', routing_key='hello', body=json.dumps(drive_backward_command))
+channel.basic_publish(exchange='', routing_key='robot', body=json.dumps(drive_backward_command))
 print("Sent drive backward command")
 
 connection.close()
