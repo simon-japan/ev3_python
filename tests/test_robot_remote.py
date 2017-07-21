@@ -6,8 +6,11 @@ import pytest
 def test_process_request():
     processor = request_processor.RequestProcessor()
 
+    result = 0
+
     def cb(a, b):
-        return a + b
+        nonlocal result
+        result = a + b
 
     processor.register_function("f", cb)
     request = {
@@ -18,4 +21,5 @@ def test_process_request():
                 'b': 2
             }
     }
-    assert request_processor.process_request(request) == 3
+    processor.process_request(request)
+    assert result == 3

@@ -1,5 +1,5 @@
 """
-RabbitMQ RPC server for EV3 robot bodies.
+RabbitMQ command listening server for EV3 robot bodies.
 """
 
 import pika
@@ -20,15 +20,9 @@ class CommandRelay(object):
 
     def start_listening(self):
         self.channel.start_consuming()
-        print("Awaiting RPC requests over RabbitMQ.")
+        print("Awaiting command messages over RabbitMQ.")
 
     def on_request(self, channel, delivery_method, msg_properties, msg_body):
         channel.basic_ack(delivery_tag=delivery_method.delivery_tag)
         json_msg = json.loads(msg_body)
-        response = self.request_processor.process_request(json_msg)
-        channel.basic_publish(
-            exchange='',
-            routing_key=msg_properties.reply_to,
-            properties=pika.BasicProperties(correlation_id=msg_properties.correlation_id),
-            body=str(response)
-        )
+        self.request_processor.process_request(json_msg)
