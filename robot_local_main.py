@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from . import request_processor
-from . import command_relay
-from . import truck
+from robot_remote import request_processor
+from robot_remote import command_relay
+from robot_remote import truck
 
 truck_command_processor = request_processor.RequestProcessor({
     'drive': truck.drive,
