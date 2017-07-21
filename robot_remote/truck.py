@@ -1,12 +1,12 @@
-from robot_body import RobotBody, ConfiguredMotor, Polarity
+from . import robot_body
 
 RIGHT_WHEEL = 'c'
 LEFT_WHEEL = 'b'
 STEERING_WHEEL = 'a'
 
-body = RobotBody()
-body.motors[RIGHT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
-body.motors[LEFT_WHEEL] = ConfiguredMotor(default_polarity=Polarity.INVERSED)
+body = robot_body.RobotBody()
+body.motors[RIGHT_WHEEL] = robot_body.ConfiguredMotor(default_polarity=robot_body.Polarity.INVERSED)
+body.motors[LEFT_WHEEL] = robot_body.ConfiguredMotor(default_polarity=robot_body.Polarity.INVERSED)
 body.detect_connected_motors()
 
 
